@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>All Courses | Singhal Law Classes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] },
+                    colors: {
+                        brand: { blue: '#1E40AF', dark: '#0F172A' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F0F4F8; color: #0F172A; }
+        .category-btn { border: 1px solid #CBD5E1; background: white; transition: background 0.2s, color 0.2s; }
+        
+        /* Requirement 5: Removed shadow effect from active state */
+        .category-btn.active { 
+            background-color: #1E40AF; 
+            color: white; 
+            border-color: #1E40AF; 
+        }
+        
+        /* Requirement 4: Brand Gradient */
+        .text-gradient { 
+            background: linear-gradient(to right, #3B82F6, #FF4B6A); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+
+        .course-card { 
+            position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.3); 
+            transition: all 0.3s ease; height: 100%; display: flex; flex-direction: column;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .course-card:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15); }
+        
+        .watermark-icon {
+            position: absolute; right: -50px; bottom: -50px; font-size: 320px;
+            opacity: 0.05; transform: rotate(-15deg); pointer-events: none; z-index: 0;
+            color: #000;
+        }
+        
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .custom-scrollbar::-webkit-scrollbar { height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1E40AF; border-radius: 10px; }
+        .animate-fadeIn { animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16">
+            <div class="flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                <img src="https://i.ibb.co/1GRCQCrz/Picsart-26-03-18-11-48-18-816.jpg" class="w-10 h-10 rounded-full">
+                <!-- Requirement 4: Gradient added to brand name -->
+                <span class="font-extrabold text-lg uppercase italic text-gradient">Singhal Classes</span>
+            </div>
+            <a href="javascript:history.back()" class="text-slate-600 font-bold text-xs uppercase tracking-tighter">Back</a>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <header class="py-8 px-4 text-center bg-white border-b border-slate-200">
+        <h1 class="text-xl sm:text-2xl font-black text-slate-900 mb-6 uppercase tracking-tight">Explore <span class="text-blue-600">Judiciary Courses</span></h1>
+        
+        <div class="relative max-w-lg mx-auto mb-8">
+            <!-- Requirement 6: Updated placeholder text -->
+            <input type="text" id="searchInput" onkeyup="filterContent()" placeholder="Search Course" 
+            class="w-full px-5 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+        </div>
+
+        <div class="flex overflow-x-auto gap-2 pb-2 px-2 custom-scrollbar no-scrollbar justify-start lg:justify-center">
+            <button onclick="changeTab('all', this)" class="category-btn active whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-bold uppercase">All Tests</button>
+            <button onclick="changeTab('comprehensive', this)" class="category-btn whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-bold uppercase">Comprehensive</button>
+            <button onclick="changeTab('hindi-pre', this)" class="category-btn whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-bold uppercase">RJS Hindi Pre</button>
+            <button onclick="changeTab('english-pre', this)" class="category-btn whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-bold uppercase">RJS English Pre</button>
+            <button onclick="changeTab('mains', this)" class="category-btn whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-bold uppercase">Mains Series</button>
+            <button onclick="changeTab('newlaws', this)" class="category-btn whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-bold uppercase">New Laws</button>
+            <button onclick="changeTab('special', this)" class="category-btn whitespace-nowrap px-4 py-2 rounded-lg text-[10px] font-bold uppercase">APO / JLO / Misc</button>
+        </div>
+    </header>
+
+    <!-- Course Grid -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <div id="courseGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- JavaScript will inject courses here -->
+        </div>
+        <div id="noData" class="hidden text-center py-24 font-bold text-slate-400">Course not found in the list.</div>
+    </main>
+
+    <script>
+        const WHATSAPP_NUM = "919887251211";
+
+        const COURSES = [
+            // PART 1: COMPREHENSIVE
+            { cat: 'comprehensive', title: 'Daily Class Practice Test Series For RJS', price: '₹5,000', duration: 'Full Access', desc: 'General / Comprehensive daily practice covering all subjects.', icon: 'fa-star', grad: 'from-amber-50 to-orange-100' },
+            { cat: 'comprehensive', title: 'RJS Pre Test Series', price: '₹4,000', duration: 'Standard', desc: 'Standard prelims mock series based on exam patterns.', icon: 'fa-gavel', grad: 'from-blue-50 to-indigo-100' },
+            { cat: 'comprehensive', title: 'RJS (Pre) English Medium Test Series', price: '₹3,000', duration: 'Full Course', desc: 'Comprehensive English medium series for Rajasthan Judiciary.', icon: 'fa-book', grad: 'from-blue-100 to-sky-200' },
+            { cat: 'comprehensive', title: 'RJS (Pre) Hindi Medium Test Series', price: '₹3,000', duration: 'Full Course', desc: 'Full-length Hindi medium prelims preparation series.', icon: 'fa-language', grad: 'from-red-50 to-rose-100' },
+            { cat: 'comprehensive', title: 'JLO Test Series Hindi Medium', price: '₹3,000', duration: 'Full Course', desc: 'Dedicated Hindi medium series for Junior Legal Officer.', icon: 'fa-balance-scale', grad: 'from-purple-50 to-fuchsia-100' },
+            { cat: 'comprehensive', title: 'RJS PRE MOCK 2025', price: '₹1,500', duration: 'Mock Exams', desc: 'Latest pattern mock series for the upcoming 2025 exam.', icon: 'fa-calendar-alt', grad: 'from-emerald-50 to-green-100' },
+            { cat: 'comprehensive', title: 'RJS Mock Test Series for RJS (Pre) Exam', price: '₹1,100', duration: 'Mock Exams', desc: 'Simulated examination practice for RJS Prelims.', icon: 'fa-clipboard-check', grad: 'from-cyan-50 to-blue-100' },
+            { cat: 'comprehensive', title: 'RJS ENGLISH', price: '₹1,100', duration: 'Subjective', desc: 'Specific focus on the English legal terminology and grammar.', icon: 'fa-pen-fancy', grad: 'from-indigo-50 to-purple-100' },
+            { cat: 'comprehensive', title: 'RJS Hindi and English Language Paper', price: '₹1,000', duration: 'Language', desc: 'Integrated course for Hindi and English language sections.', icon: 'fa-language', grad: 'from-rose-50 to-pink-100' },
+            { cat: 'comprehensive', title: 'APO PRE Test Series', price: '₹500', duration: 'Special', desc: 'Effective mock series for Assistant Prosecution Officer.', icon: 'fa-shield-halved', grad: 'from-slate-100 to-gray-200' },
+
+            // PART 2: RJS HINDI MEDIUM
+            { cat: 'hindi-pre', title: 'Constitution of India (Test 1) [Hindi]', price: '₹100', duration: '2 Hours', desc: 'Fundamental rights and basic structure in Hindi.', icon: 'fa-landmark', grad: 'from-blue-50 to-blue-100' },
+            { cat: 'hindi-pre', title: 'Constitution of India (Test 2) [Hindi]', price: '₹100', duration: '2 Hours', desc: 'Executive and Legislature powers in Hindi.', icon: 'fa-landmark', grad: 'from-blue-50 to-blue-100' },
+            { cat: 'hindi-pre', title: 'Constitution of India (Test 3) [Hindi]', price: '₹100', duration: '2 Hours', desc: 'Judiciary and Local bodies assessment in Hindi.', icon: 'fa-landmark', grad: 'from-blue-50 to-blue-100' },
+            { cat: 'hindi-pre', title: 'CPC Test 1 (Hindi Medium)', price: '₹100', duration: '2 Hours', desc: 'Civil Procedure Code section-wise assessment.', icon: 'fa-book-open', grad: 'from-indigo-50 to-indigo-100' },
+            { cat: 'hindi-pre', title: 'CPC Test 2 (Hindi Medium)', price: '₹100', duration: '1 Hr 20 Mins', desc: 'Civil Procedure Code phase 2 assessment.', icon: 'fa-book-open', grad: 'from-indigo-50 to-indigo-100' },
+            { cat: 'hindi-pre', title: 'CPC Test Series 4 (Hindi Medium)', price: '₹100', duration: '2 Hours', desc: 'Order-wise civil procedure practice in Hindi.', icon: 'fa-book-open', grad: 'from-indigo-50 to-indigo-100' },
+            { cat: 'hindi-pre', title: 'CPC Test Paper 5 (Hindi Medium)', price: '₹100', duration: '1 Hr 20 Mins', desc: 'Comprehensive CPC mock in Hindi medium.', icon: 'fa-book-open', grad: 'from-indigo-50 to-indigo-100' },
+            { cat: 'hindi-pre', title: 'Civil Procedure Code - Test 3 [Hindi]', price: '₹100', duration: '1 Hour', desc: 'Specific topic focus for CPC Hindi medium.', icon: 'fa-book-open', grad: 'from-indigo-50 to-indigo-100' },
+            { cat: 'hindi-pre', title: 'Cr.P.C. Test 1 (Section 1-189) [Hindi]', price: '₹100', duration: '1 Hr 15 Mins', desc: 'Criminal Law intro and investigation in Hindi.', icon: 'fa-gavel', grad: 'from-red-50 to-red-100' },
+            { cat: 'hindi-pre', title: 'Cr.P.C. Test 2 (Hindi Medium)', price: '₹100', duration: '1 Hr 30 Mins', desc: 'Trials and Trial procedure focused assessment.', icon: 'fa-gavel', grad: 'from-red-50 to-red-100' },
+            { cat: 'hindi-pre', title: 'Cr.P.C. Test 3 (Hindi Medium)', price: '₹100', duration: '1 Hr 15 Mins', desc: 'Judgments, Appeals, and Revision in Hindi.', icon: 'fa-gavel', grad: 'from-red-50 to-red-100' },
+            { cat: 'hindi-pre', title: 'Cr.P.C. Test 4 (Hindi Medium)', price: '₹100', duration: '30 Mins', desc: 'Rapid assessment for criminal procedure sections.', icon: 'fa-gavel', grad: 'from-red-50 to-red-100' },
+            { cat: 'hindi-pre', title: 'Indian Evidence Act (Hindi Medium)', price: '₹100', duration: '2 Hours', desc: 'Evidence law comprehensive test in Hindi.', icon: 'fa-eye', grad: 'from-green-50 to-green-100' },
+            { cat: 'hindi-pre', title: 'Indian Evidence Act - Test 2 (Hindi)', price: '₹100', duration: '20 Mins', desc: 'Quick check for Evidence Act sections.', icon: 'fa-eye', grad: 'from-green-50 to-green-100' },
+            { cat: 'hindi-pre', title: 'Contract Act Test Series 1 [Hindi]', price: '₹100', duration: '2 Hours', desc: 'General principles of contract in Hindi.', icon: 'fa-file-signature', grad: 'from-orange-50 to-orange-100' },
+            { cat: 'hindi-pre', title: 'Contract Act Test Series 3 [Hindi]', price: '₹100', duration: '2 Hours', desc: 'Special contracts and bailment in Hindi.', icon: 'fa-file-signature', grad: 'from-orange-50 to-orange-100' },
+            { cat: 'hindi-pre', title: 'IPC (Section 76 - 106) [Hindi]', price: '₹100', duration: '2 Hours', desc: 'General exceptions in Indian Penal Code.', icon: 'fa-handcuffs', grad: 'from-rose-50 to-rose-100' },
+            { cat: 'hindi-pre', title: 'IPC (Section 299 to 307) [Hindi]', price: '₹100', duration: '2 Hours', desc: 'Offences against life and body in Hindi.', icon: 'fa-handcuffs', grad: 'from-rose-50 to-rose-100' },
+            { cat: 'hindi-pre', title: 'The Limitation Act, 1963 (Test 1) [Hindi]', price: '₹100', duration: '20 Mins', desc: 'Basics and period of limitation practice.', icon: 'fa-clock', grad: 'from-slate-50 to-slate-200' },
+            { cat: 'hindi-pre', title: 'The Limitation Act, 1963 (Test 2) [Hindi]', price: '₹100', duration: '20 Mins', desc: 'Schedule-wise assessment for Limitation.', icon: 'fa-clock', grad: 'from-slate-50 to-slate-200' },
+            { cat: 'hindi-pre', title: 'Probation of Offenders Act, 1958', price: '₹100', duration: '2 Hours', desc: 'अपराधी पररवीक्षा अधधनियम test in Hindi.', icon: 'fa-user-check', grad: 'from-blue-50 to-cyan-100' },
+
+            // PART 2.2: RJS ENGLISH MEDIUM
+            { cat: 'english-pre', title: 'Constitution of India (Full Test)', price: '₹100', duration: '2 Hours', desc: 'Full length mock for Constitution in English.', icon: 'fa-landmark', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'english-pre', title: 'Constitution of India (Test 1)', price: '₹100', duration: '2 Hours', desc: 'Focus on Fundamental Rights and DPSP.', icon: 'fa-landmark', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'english-pre', title: 'Constitution of India (Test 2)', price: '₹100', duration: '2 Hours', desc: 'Focus on Executive and Parliament sections.', icon: 'fa-landmark', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'english-pre', title: 'CPC - Section-wise (Test 1)', price: '₹100', duration: '2 Hours', desc: 'Assessment covering all 158 sections of CPC.', icon: 'fa-book', grad: 'from-indigo-100 to-indigo-200' },
+            { cat: 'english-pre', title: 'CPC - Order-wise (Test 2)', price: '₹100', duration: '2 Hours', desc: 'Comprehensive practice for CPC Orders.', icon: 'fa-book', grad: 'from-indigo-100 to-indigo-200' },
+            { cat: 'english-pre', title: 'The Code of Civil Procedure (Full)', price: '₹100', duration: '2 Hours', desc: 'Full length CPC simulation for RJS English.', icon: 'fa-book', grad: 'from-indigo-100 to-indigo-200' },
+            { cat: 'english-pre', title: 'Cr.P.C. 1973 (Section 1-105L)', price: '₹100', duration: '2 Hours', desc: 'Introductory and Process assessment (English).', icon: 'fa-gavel', grad: 'from-red-100 to-red-200' },
+            { cat: 'english-pre', title: 'Cr.P.C. 1973 (Section 106-210)', price: '₹100', duration: '2 Hours', desc: 'Maintenance and Inquiry focus (English).', icon: 'fa-gavel', grad: 'from-red-100 to-red-200' },
+            { cat: 'english-pre', title: 'Cr.P.C. 1973 (Section 211-352)', price: '₹100', duration: '2 Hours', desc: 'Charge and Trial procedure focus (English).', icon: 'fa-gavel', grad: 'from-red-100 to-red-200' },
+            { cat: 'english-pre', title: 'Cr.P.C. 1973 (Section 353-484)', price: '₹100', duration: '2 Hours', desc: 'Appeals and Miscellaneous sections.', icon: 'fa-gavel', grad: 'from-red-100 to-red-200' },
+            { cat: 'english-pre', title: 'Cr.P.C. 1973 (Mock Test 1)', price: '₹100', duration: '2 Hours', desc: 'Full English medium CrPC simulation.', icon: 'fa-gavel', grad: 'from-red-100 to-red-200' },
+            { cat: 'english-pre', title: 'Cr.P.C. 1973 (Mock Test 2)', price: '₹100', duration: '1 Hour', desc: 'High-speed CrPC section assessment.', icon: 'fa-gavel', grad: 'from-red-100 to-red-200' },
+            { cat: 'english-pre', title: 'Indian Evidence Act (Section 1-55)', price: '₹100', duration: '2 Hours', desc: 'Relevancy of facts assessment (English).', icon: 'fa-eye', grad: 'from-green-100 to-green-200' },
+            { cat: 'english-pre', title: 'Indian Evidence Act (Section 56-100)', price: '₹100', duration: '2 Hours', desc: 'Proof and Documentary evidence focus.', icon: 'fa-eye', grad: 'from-green-100 to-green-200' },
+            { cat: 'english-pre', title: 'Indian Evidence Act (Section 101-167)', price: '₹100', duration: '2 Hours', desc: 'Witness and Burden of Proof focus.', icon: 'fa-eye', grad: 'from-green-100 to-green-200' },
+            { cat: 'english-pre', title: 'Indian Evidence Act (Mock Test 1)', price: '₹100', duration: '2 Hours', desc: 'Comprehensive Evidence Act assessment.', icon: 'fa-eye', grad: 'from-green-100 to-green-200' },
+            { cat: 'english-pre', title: 'Indian Evidence Act (Mock Test 2)', price: '₹100', duration: '2 Hours', desc: 'Advanced Evidence law scenarios.', icon: 'fa-eye', grad: 'from-green-100 to-green-200' },
+            { cat: 'english-pre', title: 'IPC (Section 1-106)', price: '₹100', duration: '2 Hours', desc: 'General principles of criminal law.', icon: 'fa-handcuffs', grad: 'from-rose-100 to-rose-200' },
+            { cat: 'english-pre', title: 'IPC (Section 107-190)', price: '₹100', duration: '2 Hours', desc: 'Abetment and public justice focus.', icon: 'fa-handcuffs', grad: 'from-rose-100 to-rose-200' },
+            { cat: 'english-pre', title: 'IPC (Section 191-298)', price: '₹100', duration: '2 Hours', desc: 'False evidence and public tranquility.', icon: 'fa-handcuffs', grad: 'from-rose-100 to-rose-200' },
+            { cat: 'english-pre', title: 'IPC (Section 299-377)', price: '₹100', duration: '2 Hours', desc: 'Human body offences comprehensive test.', icon: 'fa-handcuffs', grad: 'from-rose-100 to-rose-200' },
+            { cat: 'english-pre', title: 'IPC (Section 378-511)', price: '₹100', duration: '2 Hours', desc: 'Property offences and defamation.', icon: 'fa-handcuffs', grad: 'from-rose-100 to-rose-200' },
+            { cat: 'english-pre', title: 'IPC (Mock Test 1)', price: '₹100', duration: '2 Hours', desc: 'Full length IPC Mock for RJS Prelims.', icon: 'fa-handcuffs', grad: 'from-rose-100 to-rose-200' },
+            { cat: 'english-pre', title: 'IPC (Mock Test 2)', price: '₹100', duration: '2 Hours', desc: 'Scenario based IPC problem sets.', icon: 'fa-handcuffs', grad: 'from-rose-100 to-rose-200' },
+            { cat: 'english-pre', title: 'Indian Contract Act (Section 1-75)', price: '₹100', duration: '2 Hours', desc: 'General principles of Contract law.', icon: 'fa-file-signature', grad: 'from-orange-100 to-orange-200' },
+            { cat: 'english-pre', title: 'Indian Contract Act (Section 124-238)', price: '₹100', duration: '2 Hours', desc: 'Special contracts: Agency and Guarantee.', icon: 'fa-file-signature', grad: 'from-orange-100 to-orange-200' },
+            { cat: 'english-pre', title: 'Indian Contract Act (Mock Test 1)', price: '₹100', duration: '2 Hours', desc: 'Full length Contract Act mock in English.', icon: 'fa-file-signature', grad: 'from-orange-100 to-orange-200' },
+            { cat: 'english-pre', title: 'Transfer of Property Act (Section 1-53A)', price: '₹100', duration: '2 Hours', desc: 'Basics of property transfer in English.', icon: 'fa-home', grad: 'from-amber-100 to-amber-200' },
+            { cat: 'english-pre', title: 'Transfer of Property Act (Section 54-137)', price: '₹100', duration: '2 Hours', desc: 'Mortgage, Sale and Lease assessment.', icon: 'fa-home', grad: 'from-amber-100 to-amber-200' },
+            { cat: 'english-pre', title: 'Transfer of Property Act (Previous Year Questions)', price: '₹100', duration: '2 Hours', desc: 'Most frequently asked property law questions.', icon: 'fa-home', grad: 'from-amber-100 to-amber-200' },
+            { cat: 'english-pre', title: 'The Specific Relief Act (Full)', price: '₹100', duration: '2 Hours', desc: 'Comprehensive SRA mastery test.', icon: 'fa-balance-scale-left', grad: 'from-blue-100 to-blue-200' },
+            { cat: 'english-pre', title: 'The Specific Relief Act (Test 2)', price: '₹100', duration: '1 Hour', desc: 'Specific topics and amendments focus.', icon: 'fa-balance-scale-left', grad: 'from-blue-100 to-blue-200' },
+            { cat: 'english-pre', title: 'Rajasthan Rent Control Act, 2001', price: '₹100', duration: '2 Hours', desc: 'Core local law for Rajasthan judiciary.', icon: 'fa-building', grad: 'from-slate-100 to-slate-200' },
+            { cat: 'english-pre', title: 'Protection of Women from Domestic Violence Act, 2005', price: '₹100', duration: '2 Hours', desc: 'Social welfare law focus (English).', icon: 'fa-user-shield', grad: 'from-pink-100 to-pink-200' },
+            { cat: 'english-pre', title: 'The Juvenile Justice Act', price: '₹100', duration: '2 Hours', desc: 'Comprehensive JJ Act 2015 assessment.', icon: 'fa-child', grad: 'from-indigo-100 to-indigo-200' },
+            { cat: 'english-pre', title: 'The Limitation Act', price: '₹100', duration: '2 Hours', desc: 'Limitation periods and section mastery.', icon: 'fa-clock', grad: 'from-slate-100 to-slate-200' },
+            { cat: 'english-pre', title: 'Interpretation of Statutes', price: '₹100', duration: '1 Hour', desc: 'Rules of interpretation assessment.', icon: 'fa-book-open', grad: 'from-teal-50 to-teal-100' },
+            { cat: 'english-pre', title: 'The Negotiable Instruments Act, 1881', price: '₹100', duration: '1 Hour', desc: 'Check bounce and NI act focus.', icon: 'fa-money-check-dollar', grad: 'from-emerald-100 to-emerald-200' },
+            { cat: 'english-pre', title: 'The Probation of Offenders Act, 1958', price: '₹100', duration: '1 Hour', desc: 'Specialized criminal law test (English).', icon: 'fa-person-walking', grad: 'from-cyan-100 to-cyan-200' },
+            { cat: 'english-pre', title: 'POCSO Act 2012', price: '₹100', duration: '1 Hour', desc: 'Child protection law assessment.', icon: 'fa-shield-heart', grad: 'from-red-100 to-red-200' },
+            { cat: 'english-pre', title: 'Indecent Representation of Women Act, 1986', price: '₹100', duration: '1 Hour', desc: 'Socio-legal legislation focus.', icon: 'fa-venus', grad: 'from-pink-100 to-pink-200' },
+            { cat: 'english-pre', title: 'Supreme Court Case Study (English Medium)', price: '₹100', duration: '30 Mins', desc: 'Recent and landmark SC judgments.', icon: 'fa-scroll', grad: 'from-blue-100 to-sky-100' },
+
+            // PART 3: LANGUAGE SECTION
+            { cat: 'language', title: 'English: Tenses', price: '₹100', duration: '2 Hours', desc: 'Grammar mastery for RJS Language paper.', icon: 'fa-spell-check', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'language', title: 'English: Articles and Determiners', price: '₹100', duration: '2 Hours', desc: 'Article usage and determiners practice.', icon: 'fa-spell-check', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'language', title: 'English: Active and Passive Voice', price: '₹100', duration: '2 Hours', desc: 'Sentence transformation rules.', icon: 'fa-spell-check', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'language', title: 'English: Direct and Indirect Speech', price: '₹100', duration: '2 Hours', desc: 'Narration and reported speech mastery.', icon: 'fa-spell-check', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'language', title: 'English: Modals', price: '₹100', duration: '2 Hours', desc: 'Modal auxiliary verb assessment.', icon: 'fa-spell-check', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'language', title: 'English: Idioms and Phrases', price: '₹100', duration: '2 Hours', desc: 'Essential vocabulary for Judiciary.', icon: 'fa-spell-check', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'language', title: 'English: Synonyms and Antonyms', price: '₹100', duration: '2 Hours', desc: 'Advanced word power assessment.', icon: 'fa-spell-check', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'language', title: 'English: Co-ordination and Subordination', price: '₹100', duration: '2 Hours', desc: 'Sentence synthesis and structures.', icon: 'fa-spell-check', grad: 'from-blue-50 to-blue-200' },
+            { cat: 'language', title: 'Hindi Paper 1 (RJS Language)', price: '₹100', duration: '2 Hours', desc: 'Official pattern RJS Hindi mock.', icon: 'fa-language', grad: 'from-red-50 to-rose-200' },
+            { cat: 'language', title: 'Hindi: Upsarg and Prataya', price: '₹100', duration: '2 Hours', desc: 'Hindi grammar prefixes and suffixes.', icon: 'fa-language', grad: 'from-red-50 to-rose-200' },
+
+            // PART 4: NEW CRIMINAL LAWS
+            { cat: 'newlaws', title: 'BNS Paper 1 (Section 1-146)', price: '₹100', duration: '2 Hours', desc: 'New Bhartiya Nyaya Sanhita assessment.', icon: 'fa-scale-balanced', grad: 'from-indigo-100 to-indigo-200' },
+            { cat: 'newlaws', title: 'BNS Paper 2 (Section 147-226)', price: '₹100', duration: '2 Hours', desc: 'New BNS criminal law phase 2 test.', icon: 'fa-scale-balanced', grad: 'from-indigo-100 to-indigo-200' },
+            { cat: 'newlaws', title: 'BNS Paper 3 (Section 227-358)', price: '₹100', duration: '2 Hours', desc: 'New BNS criminal law phase 3 test.', icon: 'fa-scale-balanced', grad: 'from-indigo-100 to-indigo-200' },
+            { cat: 'newlaws', title: 'BNS Paper 4 (All Sections)', price: '₹100', duration: '2 Hours', desc: 'Comprehensive BNS Mock Exam.', icon: 'fa-scale-balanced', grad: 'from-indigo-100 to-indigo-200' },
+            { cat: 'newlaws', title: 'BNSS (Section 1-222)', price: '₹100', duration: '2 Hours', desc: 'Bhartiya Nagarik Suraksha Sanhita Test.', icon: 'fa-shield-halved', grad: 'from-slate-100 to-slate-200' },
+            { cat: 'newlaws', title: 'BNSS (Section 223-531)', price: '₹100', duration: '2 Hours', desc: 'BNSS procedural law assessment.', icon: 'fa-shield-halved', grad: 'from-slate-100 to-slate-200' },
+            { cat: 'newlaws', title: 'BSA (Section 1-50)', price: '₹100', duration: '2 Hours', desc: 'Bhartiya Sakshya Adhiniyam intro.', icon: 'fa-fingerprint', grad: 'from-emerald-100 to-emerald-200' },
+            { cat: 'newlaws', title: 'BSA (Section 104-170)', price: '₹100', duration: '2 Hours', desc: 'BSA evidence law phase 2 practice.', icon: 'fa-fingerprint', grad: 'from-emerald-100 to-emerald-200' },
+            { cat: 'newlaws', title: 'BSA (Section 1-170) Full Test', price: '₹100', duration: '2 Hours', desc: 'Complete BSA Mock for 2025.', icon: 'fa-fingerprint', grad: 'from-emerald-100 to-emerald-200' },
+
+            // PART 5: APO, JLO & MISC
+            { cat: 'special', title: 'APO 2024 Mock Tests (1 to 10)', price: '₹500', duration: '3 Hours', desc: 'Comprehensive set of 10 APO mocks.', icon: 'fa-user-tie', grad: 'from-slate-400 to-gray-500' },
+            { cat: 'special', title: 'The Arms Act, 1959', price: '₹100', duration: '2 Hours', desc: 'Specialized APO law assessment.', icon: 'fa-gun', grad: 'from-red-400 to-orange-500' },
+            { cat: 'special', title: 'SC and ST Act', price: '₹100', duration: '2 Hours', desc: 'Hindi medium specialized law test.', icon: 'fa-gavel', grad: 'from-stone-400 to-gray-500' },
+            { cat: 'special', title: 'NDPS Act, 1985', price: '₹100', duration: '2 Hours', desc: 'Narcotic drugs act assessment.', icon: 'fa-pills', grad: 'from-rose-400 to-pink-500' },
+            { cat: 'special', title: 'FSS Act, 2006', price: '₹100', duration: '2 Hours', desc: 'Food Safety Act assessment for APO.', icon: 'fa-utensils', grad: 'from-orange-400 to-amber-500' },
+            { cat: 'special', title: 'JLO 2023 Paper 1: Constitution', price: '₹100', duration: '3 Hours', desc: 'Junior Legal Officer previous year mock.', icon: 'fa-landmark', grad: 'from-blue-400 to-indigo-500' },
+            { cat: 'special', title: 'JLO 2023 Paper 2: CPC and CrPC', price: '₹100', duration: '3 Hours', desc: 'JLO procedural law simulation.', icon: 'fa-book-open', grad: 'from-indigo-400 to-purple-500' },
+            { cat: 'special', title: 'JLO 2023 Paper 3: Evidence & Interpretation', price: '₹100', duration: '3 Hours', desc: 'Evidence law mock for JLO.', icon: 'fa-clock', grad: 'from-emerald-400 to-green-500' },
+            { cat: 'special', title: 'JLO 2023 Paper 4: Hindi and English', price: '₹100', duration: '3 Hours', desc: 'Language paper simulation for JLO.', icon: 'fa-language', grad: 'from-pink-400 to-rose-500' },
+            { cat: 'special', title: 'RJS Preliminary Mock Paper 1-5', price: '₹100', duration: '2 Hours', desc: 'RJS 2025 series of mock papers.', icon: 'fa-vial', grad: 'from-cyan-400 to-blue-500' },
+            { cat: 'special', title: 'RJS (Pre) Exam Mock Test Papers 1, 2, 3, 4', price: '₹1100', duration: '2 Hours', desc: 'RJS 2021 premium mock series.', icon: 'fa-list-ol', grad: 'from-blue-400 to-indigo-600' },
+            { cat: 'special', title: 'NET (Law) Hindu Law', price: '₹100', duration: '1 Hour', desc: 'Hindi Medium NET law prep.', icon: 'fa-university', grad: 'from-amber-300 to-orange-400' },
+            { cat: 'special', title: 'NET (Law) Muslim Law', price: '₹100', duration: '1 Hour', desc: 'Hindi Medium NET law prep.', icon: 'fa-mosque', grad: 'from-emerald-300 to-green-400' },
+            { cat: 'special', title: 'Rajasthan Court Fees and Suit Valuation Act', price: '₹100', duration: '2 Hours', desc: 'Specific local law assessment.', icon: 'fa-money-bill', grad: 'from-green-300 to-teal-400' },
+            { cat: 'special', title: 'Registration Act', price: '₹100', duration: '2 Hours', desc: 'Full Registration Act assessment.', icon: 'fa-file-signature', grad: 'from-blue-300 to-sky-400' },
+            { cat: 'special', title: 'Sale of Goods Act', price: '₹100', duration: '2 Hours', desc: 'Commercial law specialized test.', icon: 'fa-cart-shopping', grad: 'from-orange-300 to-red-400' },
+
+            // PART 3: MAINS SERIES
+            { cat: 'mains', title: 'CrPC 1973 (Mains Paper 1)', price: '₹200', duration: 'Mains Practice', desc: 'Subjective answer writing (Sec 1-224).', icon: 'fa-pen-nib', grad: 'from-red-200 to-red-300' },
+            { cat: 'mains', title: 'CrPC 1973 (Mains Paper 2)', price: '₹200', duration: 'Mains Practice', desc: 'Subjective answer writing (Sec 225-484).', icon: 'fa-pen-nib', grad: 'from-red-200 to-red-300' },
+            { cat: 'mains', title: 'IPC 1860 (Mains Paper 1)', price: '₹200', duration: 'Mains Practice', desc: 'Penal Code writing practice (Sec 1-298).', icon: 'fa-pen-nib', grad: 'from-rose-200 to-rose-300' },
+            { cat: 'mains', title: 'IPC 1860 (Mains Paper 2)', price: '₹200', duration: 'Mains Practice', desc: 'Penal Code writing practice (Sec 299-511).', icon: 'fa-pen-nib', grad: 'from-rose-200 to-rose-300' },
+            { cat: 'mains', title: 'Evidence Act (Mains Paper 1)', price: '₹200', duration: 'Mains Practice', desc: 'Evidence Law writing practice (Sec 1-55).', icon: 'fa-pen-nib', grad: 'from-green-200 to-green-300' },
+            { cat: 'mains', title: 'Evidence Act (Mains Paper 2)', price: '₹200', duration: 'Mains Practice', desc: 'Evidence Law writing practice (Sec 56-100).', icon: 'fa-pen-nib', grad: 'from-green-200 to-green-300' },
+            { cat: 'mains', title: 'Evidence Act (Mains Paper 3)', price: '₹200', duration: 'Mains Practice', desc: 'Evidence Law writing practice (Sec 101-167).', icon: 'fa-pen-nib', grad: 'from-green-200 to-green-300' },
+            { cat: 'mains', title: 'Constitution (Mains Paper 1)', price: '₹100', duration: 'Mains Practice', desc: 'Constitution writing practice (Articles 1-51A).', icon: 'fa-pen-nib', grad: 'from-blue-200 to-blue-300' },
+            { cat: 'mains', title: 'Constitution (Mains Paper 2)', price: '₹100', duration: 'Mains Practice', desc: 'Constitution writing practice (Articles 52-151).', icon: 'fa-pen-nib', grad: 'from-blue-200 to-blue-300' },
+            { cat: 'mains', title: 'Constitution (Mains Paper 3)', price: '₹100', duration: 'Mains Practice', desc: 'Constitution writing practice (Articles 152-395).', icon: 'fa-pen-nib', grad: 'from-blue-200 to-blue-300' },
+            { cat: 'mains', title: 'CPC 1908 (Mains Paper 1)', price: '₹200', duration: 'Mains Practice', desc: 'CPC section-wise subjective practice.', icon: 'fa-pen-nib', grad: 'from-indigo-200 to-indigo-300' },
+            { cat: 'mains', title: 'CPC 1908 (Mains Paper 2)', price: '₹200', duration: 'Mains Practice', desc: 'CPC order-wise subjective practice.', icon: 'fa-pen-nib', grad: 'from-indigo-200 to-indigo-300' },
+            { cat: 'mains', title: 'Indian Contract (Mains Paper 1)', price: '₹200', duration: 'Mains Practice', desc: 'Contract Law Sec 1-75 mains writing.', icon: 'fa-pen-nib', grad: 'from-orange-200 to-orange-300' },
+            { cat: 'mains', title: 'Indian Contract (Mains Paper 2)', price: '₹200', duration: 'Mains Practice', desc: 'Contract Law Sec 124-238 mains writing.', icon: 'fa-pen-nib', grad: 'from-orange-200 to-orange-300' },
+            { cat: 'mains', title: 'Transfer of Property (Test Paper 1)', price: '₹100', duration: 'Mains Practice', desc: 'TPA Part 1 subjective answer writing.', icon: 'fa-pen-nib', grad: 'from-amber-200 to-amber-300' },
+            { cat: 'mains', title: 'Transfer of Property (Test Paper 2)', price: '₹100', duration: 'Mains Practice', desc: 'TPA Part 2 subjective answer writing.', icon: 'fa-pen-nib', grad: 'from-amber-200 to-amber-300' },
+            { cat: 'mains', title: 'Specific Relief Act (Mains Paper 1)', price: '₹200', duration: 'Mains Practice', desc: 'SRA Sec 1-25 subjective practice.', icon: 'fa-pen-nib', grad: 'from-sky-200 to-sky-300' },
+            { cat: 'mains', title: 'Specific Relief Act (Mains Paper 2)', price: '₹200', duration: 'Mains Practice', desc: 'SRA Sec 26-42 subjective practice.', icon: 'fa-pen-nib', grad: 'from-sky-200 to-sky-300' },
+            { cat: 'mains', title: 'The Limitation Act (Mains)', price: '₹200', duration: 'Mains Practice', desc: 'Full Act subjective answer writing.', icon: 'fa-pen-nib', grad: 'from-slate-200 to-slate-300' },
+            { cat: 'mains', title: 'NI Act 1881 (Mains)', price: '₹200', duration: 'Mains Practice', desc: 'Check bounce and NI act subjective.', icon: 'fa-pen-nib', grad: 'from-teal-200 to-teal-300' },
+            { cat: 'mains', title: 'Juvenile Justice Act (Mains)', price: '₹200', duration: 'Mains Practice', desc: 'JJ Act full act mains practice.', icon: 'fa-pen-nib', grad: 'from-blue-200 to-indigo-300' },
+            { cat: 'mains', title: 'Probation of Offenders (Mains)', price: '₹200', duration: 'Mains Practice', desc: 'Subjective practice for probation laws.', icon: 'fa-pen-nib', grad: 'from-cyan-200 to-blue-300' },
+            { cat: 'mains', title: 'DV Act 2005 (Mains)', price: '₹200', duration: 'Mains Practice', desc: 'Domestic Violence Act mains practice.', icon: 'fa-pen-nib', grad: 'from-pink-200 to-rose-300' },
+            { cat: 'mains', title: 'Rent Control Act (Mains)', price: '₹200', duration: 'Mains Practice', desc: 'Rajasthan Local Law subjective writing.', icon: 'fa-pen-nib', grad: 'from-slate-300 to-gray-400' },
+            { cat: 'mains', title: 'English Essay Writing', price: '₹200', duration: 'Mains Practice', desc: 'Judiciary focused English essay writing.', icon: 'fa-feather', grad: 'from-blue-300 to-indigo-400' },
+            { cat: 'mains', title: 'Hindi Essay Writing', price: '₹200', duration: 'Mains Practice', desc: 'न्यायिक निबन्ध लेखन अभ्यास।', icon: 'fa-feather', grad: 'from-rose-300 to-red-400' }
+        ];
+
+        function renderGrid(data) {
+            const grid = document.getElementById('courseGrid');
+            const noData = document.getElementById('noData');
+            grid.innerHTML = '';
+            
+            if(data.length === 0) {
+                noData.classList.remove('hidden');
+                return;
+            }
+            noData.classList.add('hidden');
+
+            data.forEach((item, index) => {
+                const card = `
+                    <div class="course-card rounded-3xl p-5 bg-gradient-to-br ${item.grad} animate-fadeIn shadow-sm border border-white">
+                        <i class="fas ${item.icon} watermark-icon"></i>
+                        <div class="flex justify-between items-start mb-4 relative z-10">
+                            <div class="w-10 h-10 rounded-xl flex items-center justify-center text-lg bg-white/60 shadow-inner border border-white">
+                                <i class="fas ${item.icon} text-slate-800"></i>
+                            </div>
+                            <div class="bg-black text-white text-[11px] font-black px-3 py-1.5 rounded-lg shadow-lg uppercase">
+                                ${item.price}
+                            </div>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-[14px] leading-tight mb-2 relative z-10 min-h-[42px]">${item.title}</h3>
+                        <p class="text-slate-700 text-[10px] leading-relaxed mb-4 flex-grow relative z-10 font-medium line-clamp-2">${item.desc}</p>
+                        <div class="flex items-center gap-2 mb-6 relative z-10">
+                            <span class="text-[9px] font-black px-2.5 py-1 rounded-md bg-white/80 border border-white text-slate-700 uppercase tracking-widest">
+                                <i class="far fa-clock mr-1 text-blue-800"></i> ${item.duration}
+                            </span>
+                        </div>
+                        <button onclick="enroll('${item.title}', '${item.price}')" class="w-full mt-auto py-3 rounded-2xl bg-white border border-slate-200 text-brand-blue font-black text-[10px] uppercase shadow-md active:shadow-none hover:bg-slate-50 transition-all flex items-center justify-center gap-2 relative z-10">
+                            <i class="fab fa-whatsapp text-sm"></i> Enroll via WhatsApp
+                        </button>
+                    </div>
+                `;
+                grid.insertAdjacentHTML('beforeend', card);
+            });
+        }
+
+        let currentTab = 'all';
+        function changeTab(cat, btn) {
+            currentTab = cat;
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            btn.classList.add('active');
+            filterContent();
+        }
+
+        function filterContent() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = COURSES.filter(c => {
+                const matchTab = currentTab === 'all' || c.cat === currentTab;
+                const matchSearch = c.title.toLowerCase().includes(query);
+                return matchTab && matchSearch;
+            });
+            renderGrid(filtered);
+        }
+
+        function enroll(name, price) {
+            const text = `Hello Singhal Law Classes! 👋\n\nI'm interested in enrolling for:\n📚 *Course:* ${name}\n💰 *Price:* ${price}\n\nPlease share the payment details.`;
+            window.open(`https://wa.me/${WHATSAPP_NUM}?text=${encodeURIComponent(text)}`, '_blank');
+        }
+
+        window.onload = () => renderGrid(COURSES);
+    </script>
+</body>
+</html>
